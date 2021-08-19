@@ -6,6 +6,14 @@
   roles:
     - common
 
+# For CI, ensure self-signed cert ready before loading nginx config
+- hosts: ci:dev
+  become: true
+  vars_files:
+    - vars.yml
+  roles:
+    - self_signed_ssl_cert
+
 - hosts: app_server
   become: true
   vars_files:
@@ -39,7 +47,6 @@
   vars_files:
     - vars.yml
   roles:
-    - self_signed_ssl_cert
     - prometheus
     - java
     - nodejs

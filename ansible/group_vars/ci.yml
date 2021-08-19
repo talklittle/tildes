@@ -1,0 +1,7 @@
+---
+nginx_apt_repo: deb http://nginx.org/packages/mainline/ubuntu focal nginx
+postgresql_apt_repo: deb http://apt.postgresql.org/pub/repos/apt focal-pgdg main
+nodejs_apt_repo: deb https://deb.nodesource.com/node_14.x focal main
+
+nginx_user: nobody nogroup
+nginx_pidfile_path: /run/nginx.pid

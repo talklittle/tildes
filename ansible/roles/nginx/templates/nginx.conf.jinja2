@@ -1,8 +1,8 @@
-user nginx;
+user {{ nginx_user }};
 worker_processes {{ nginx_worker_processes }};
 
 error_log /var/log/nginx/error.log warn;
-pid /var/run/nginx.pid;
+pid {{ nginx_pidfile_path }};
 
 
 events {

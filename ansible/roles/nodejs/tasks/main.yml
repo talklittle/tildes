@@ -5,7 +5,7 @@
 
 - name: Add NodeSource Node.js APT repository
   apt_repository:
-    repo: deb https://deb.nodesource.com/node_14.x buster main
+    repo: "{{ nodejs_apt_repo }}"
 
 - name: Install Node.js
   apt:

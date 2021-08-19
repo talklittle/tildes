@@ -1,6 +1,10 @@
 ---
+nginx_user: nginx
 nginx_enable_sendfile: true
 nginx_worker_processes: auto
+nginx_pidfile_path: /var/run/nginx.pid
 
 ssl_cert_path: /etc/letsencrypt/live/{{ site_hostname }}/fullchain.pem
 ssl_private_key_path: /etc/letsencrypt/live/{{ site_hostname }}/privkey.pem
+
+nginx_apt_repo: deb http://nginx.org/packages/debian/ buster nginx

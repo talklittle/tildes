@@ -1,0 +1,39 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-20.04
+
+    services:
+      nginx:
+        image: nginx
+        # Map port 8080 on the Docker host to port 80 on the nginx container
+        ports:
+          - 8080:80
+          - 4443:443
+          - 9090:9090
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Mount directories
+        run: |
+          sudo mkdir -p --mode=777 /opt/tildes
+          sudo mkdir -p --mode=777 /srv/ansible
+          sudo mount --bind tildes /opt/tildes
+          sudo mount --bind ansible /srv/ansible
+      - name: Make app directory world-writable for Ansible dev user
+        run: sudo chmod -R 777 /opt/tildes
+      - name: Link python to system directories
+        run: |
+          which python3.9  # print for debugging
+          sudo ln -s `which python3.9` /usr/bin/python3.9
+          sudo ln -s `which python3.9` /usr/local/bin/python3.9
+      - name: Install and run Ansible
+        run: |
+          pip install ansible
+          ansible-galaxy collection install -r ansible/requirements.yml
+          ansible-playbook --inventory ansible/ci_inventory.ini ansible/playbook.yml
+      - run: . activate && invoke type-check test --quiet --full code-style-check --full

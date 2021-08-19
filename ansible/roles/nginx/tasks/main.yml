@@ -1,15 +1,23 @@
 ---
-- name: Add APT key for nginx repository
-  apt_key:
-    url: https://nginx.org/keys/nginx_signing.key
+- name: Check if nginx is already installed
+  command: which nginx
+  register: which_nginx
+  ignore_errors: true
 
-- name: Add nginx APT repository
-  apt_repository:
-    repo: deb http://nginx.org/packages/debian/ buster nginx
+- name: Download and install nginx
+  when: which_nginx.rc != 0
+  block:
+    - name: Add APT key for nginx repository
+      apt_key:
+        url: https://nginx.org/keys/nginx_signing.key
 
-- name: Install nginx
-  apt:
-    name: nginx
+    - name: Add nginx APT repository
+      apt_repository:
+        repo: "{{ nginx_apt_repo }}"
+
+    - name: Install nginx
+      apt:
+        name: nginx
 
 - name: Start and enable nginx service
   service:
