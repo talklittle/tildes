@@ -18,3 +18,6 @@
     # --no-bin-links option is needed to prevent npm from creating symlinks in the .bin
     # directory, which doesn't work inside Vagrant on Windows
     no_bin_links: true
+    # npm ci needs to be run, for a clean install, instead of npm install.
+    # otherwise node_modules is never created/updated (Ansible bug?)
+    ci: true
